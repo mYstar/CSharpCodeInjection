@@ -1,4 +1,5 @@
 Dynamic Source Code Generation and Compilation:
 http://msdn.microsoft.com/en-us/library/650ax5cx.aspx
 
-
+execute an assembly:
+http://www.codeproject.com/Articles/13747/Dynamically-load-a-class-and-execute-a-method-in-N
