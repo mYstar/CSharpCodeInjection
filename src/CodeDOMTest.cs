@@ -6,6 +6,7 @@ using System.CodeDom;
 using Microsoft.CSharp;
 using System.IO;
 using System.CodeDom.Compiler;
+using System.Reflection;
 
 namespace CodeDOMTest
 {
@@ -26,65 +27,60 @@ namespace CodeDOMTest
             CodeTypeDeclaration class1 = new CodeTypeDeclaration("Class1");
             // Klasse hinzufügen
             samples.Types.Add(class1);
-            
+
             // eine Methode erstellen
             CodeEntryPointMethod start = new CodeEntryPointMethod();
             // ein Statement erstellen
-            CodeMethodInvokeExpression cs1 = new CodeMethodInvokeExpression(
-                new CodeTypeReferenceExpression("System.Console"),
-                "WriteLine", new CodePrimitiveExpression("Hello World!"));
+            //CodeMethodInvokeExpression cs1 = new CodeMethodInvokeExpression(
+            //    new CodeTypeReferenceExpression("System.Console"),
+            //    "WriteLine", new CodePrimitiveExpression("Hello World!"));
+            CodeSnippetStatement snip = new CodeSnippetStatement();
+            snip.Value = " Console.WriteLine(\"Snap\");";
             // das Statement zur Methode hinzufügen
-            start.Statements.Add(cs1);
+            start.Statements.Add(snip);
 
             // der Klasse die Methode hinzufügen
             class1.Members.Add(start);
 
             // Quellfile erstellen
-            String gen_code_file = GenerateCSharpCode(compileUnit, "hello_world");
+            String gen_code = GenerateCSharpCode(compileUnit);
+
+            //test write the output
+            Console.WriteLine(gen_code);
 
             // Quellfile compilieren
-            CompileCSharpCode(gen_code_file, "hello.exe");
+            Assembly compiled_code = CompileCSharpCode(gen_code);
+
+            // execute the Assembly
+            InvokeMethod(compiled_code, "Class1", "Main", null);
+
+            Console.ReadLine();
         }
 
         /**
          * Hier wird aus einer vorgefertigten CodeCompileUnit ein C# SourceFile generiert
          */
-        public static string GenerateCSharpCode(CodeCompileUnit compileunit, String filename)
+        public static string GenerateCSharpCode(CodeCompileUnit compileunit)
         {
             // Generate the code with the C# code provider.
             CSharpCodeProvider provider = new CSharpCodeProvider();
 
-            // Build the output file name.
-            string sourceFile;
-            if (provider.FileExtension[0] == '.')
-            {
-                sourceFile = filename + provider.FileExtension;
-            }
-            else
-            {
-                sourceFile = filename + "." + provider.FileExtension;
-            }
+            // Create a StringWriter
+            StringWriter sw = new StringWriter();
+            IndentedTextWriter tw = new IndentedTextWriter(sw, "  ");
 
-            // Create a TextWriter to a StreamWriter to the output file.
-            using (StreamWriter sw = new StreamWriter(sourceFile, false))
-            {
-                IndentedTextWriter tw = new IndentedTextWriter(sw, "  ");
+            // Generate source code using the code provider.
+            provider.GenerateCodeFromCompileUnit(compileunit, tw, new CodeGeneratorOptions());
 
-                // Generate source code using the code provider.
-                provider.GenerateCodeFromCompileUnit(compileunit, tw,
-                    new CodeGeneratorOptions());
-
-                // Close the output file.
-                tw.Close();
-            }
-
-            return sourceFile;
+            tw.Close();
+            sw.Close();
+            return sw.ToString();
         }
 
         /**
-         * Hier wird ein SourceFile zu einer exe compiliert.
+         * Hier wird ein SourceFile zu einem assembly compiliert.
          */
-        public static bool CompileCSharpCode(string sourceFile, string exeFile)
+        public static Assembly CompileCSharpCode(string sourceCode)
         {
             CSharpCodeProvider provider = new CSharpCodeProvider();
 
@@ -94,24 +90,22 @@ namespace CodeDOMTest
             // Add an assembly reference.
             cp.ReferencedAssemblies.Add("System.dll");
 
-            // Generate an executable instead of
-            // a class library.
-            cp.GenerateExecutable = true;
+            // don't generate a stand-alone executable
+            cp.GenerateExecutable = false;
 
             // Set the assembly file name to generate.
-            cp.OutputAssembly = exeFile;
+            cp.OutputAssembly = null;
 
             // Save the assembly as a physical file.
-            cp.GenerateInMemory = false;
+            cp.GenerateInMemory = true;
 
             // Invoke compilation.
-            CompilerResults cr = provider.CompileAssemblyFromFile(cp, sourceFile);
+            CompilerResults cr = provider.CompileAssemblyFromSource(cp, sourceCode);
 
             if (cr.Errors.Count > 0)
             {
                 // Display compilation errors.
-                Console.WriteLine("Errors building {0} into {1}",
-                    sourceFile, cr.PathToAssembly);
+                Console.WriteLine("building Errors:");
                 foreach (CompilerError ce in cr.Errors)
                 {
                     Console.WriteLine("  {0}", ce.ToString());
@@ -120,19 +114,44 @@ namespace CodeDOMTest
             }
             else
             {
-                Console.WriteLine("Source {0} built into {1} successfully.",
-                    sourceFile, cr.PathToAssembly);
+                Console.WriteLine("Source built successfully.");
             }
 
             // Return the results of compilation.
             if (cr.Errors.Count > 0)
             {
-                return false;
+                return null;
             }
             else
             {
-                return true;
+                return cr.CompiledAssembly;
             }
+        }
+
+        public static Object InvokeMethod(Assembly assembly ,
+           string ClassName, string MethodName, Object[] args)
+        {
+            // Walk through each type in the assembly looking for our class
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.IsClass == true)
+                {
+                    if (type.FullName.EndsWith("." + ClassName))
+                    {
+                        // create an instance of the object
+                        object ClassObj = Activator.CreateInstance(type);
+
+                        // Dynamically Invoke the method
+                        object Result = type.InvokeMember(MethodName,
+                          BindingFlags.Default | BindingFlags.InvokeMethod,
+                               null,
+                               ClassObj,
+                               args);
+                        return (Result);
+                    }
+                }
+            }
+            throw (new System.Exception("could not invoke method"));
         }
     }
 }
