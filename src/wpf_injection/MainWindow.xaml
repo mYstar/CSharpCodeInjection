@@ -1,0 +1,10 @@
+﻿<Window x:Class="CodeInjection.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="525" Width="800">
+    <Grid>
+        <TextBox Height="200" HorizontalAlignment="Left" Margin="35,25,0,0"  Name="textBox_input"  VerticalAlignment="Top" Width="550" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+        <TextBox Height="83"  HorizontalAlignment="Left" Margin="35,240,0,0" Name="textBox_output" VerticalAlignment="Top" Width="550" ClipToBounds="True" TextWrapping="Wrap" IsReadOnly="True" />
+        <Button Content="Compile and Execute" Height="25" HorizontalAlignment="Left" Margin="603,25,0,0" Name="button_generate" VerticalAlignment="Top" Width="138" Click="button_generate_Click" />
+    </Grid>
+</Window>
