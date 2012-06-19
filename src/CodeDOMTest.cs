@@ -46,12 +46,29 @@ namespace CodeDOMTest
             CodeMemberMethod pub_method = new CodeMemberMethod();
             pub_method.Name = "doubleThis";
             pub_method.ReturnType = new CodeTypeReference("System.Double");
-            pub_method.Attributes = MemberAttributes.Public | MemberAttributes.Static;
+            pub_method.Attributes = MemberAttributes.Public;
             pub_method.Parameters.Add(new CodeParameterDeclarationExpression("System.Double", "value"));
             CodeSnippetStatement snip2 = new CodeSnippetStatement();
-            snip2.Value = "return value*2;";
+            snip2.Value = "Console.WriteLine(what_to_print); return value*2;";
             pub_method.Statements.Add(snip2);
             class1.Members.Add(pub_method); // der Klasse die Methode hinzufügen
+
+            /*
+             * ein private Member erstellen
+             */
+            CodeMemberField pub_member = new CodeMemberField("System.String", "what_to_print");
+            pub_member.Attributes = MemberAttributes.Private;
+            class1.Members.Add(pub_member);
+
+            /*
+             * einen Construktor erstellen
+             */
+            CodeConstructor constructor = new CodeConstructor();
+            constructor.Attributes = MemberAttributes.Public;
+            CodeSnippetStatement snip3 = new CodeSnippetStatement();
+            snip3.Value = "what_to_print = \"Hi codeinjection.\";";
+            constructor.Statements.Add(snip3);
+            class1.Members.Add(constructor);
 
             // Quellfile erstellen
             String gen_code = GenerateCSharpCode(compileUnit);
