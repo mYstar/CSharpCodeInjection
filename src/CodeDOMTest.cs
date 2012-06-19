@@ -28,19 +28,30 @@ namespace CodeDOMTest
             // Klasse hinzufügen
             samples.Types.Add(class1);
 
-            // eine Methode erstellen
+            /*
+             * eine main-Methode erstellen
+             */
             CodeEntryPointMethod start = new CodeEntryPointMethod();
-            // ein Statement erstellen
             //CodeMethodInvokeExpression cs1 = new CodeMethodInvokeExpression(
             //    new CodeTypeReferenceExpression("System.Console"),
             //    "WriteLine", new CodePrimitiveExpression("Hello World!"));
-            CodeSnippetStatement snip = new CodeSnippetStatement();
+            CodeSnippetStatement snip = new CodeSnippetStatement(); // ein Statement erstellen
             snip.Value = " Console.WriteLine(\"Snap\");";
-            // das Statement zur Methode hinzufügen
-            start.Statements.Add(snip);
+            start.Statements.Add(snip); // das Statement zur Methode hinzufügen
+            class1.Members.Add(start); // der Klasse die Methode hinzufügen
 
-            // der Klasse die Methode hinzufügen
-            class1.Members.Add(start);
+            /*
+             * eine public methode erstellen
+             */
+            CodeMemberMethod pub_method = new CodeMemberMethod();
+            pub_method.Name = "doubleThis";
+            pub_method.ReturnType = new CodeTypeReference("System.Double");
+            pub_method.Attributes = MemberAttributes.Public | MemberAttributes.Static;
+            pub_method.Parameters.Add(new CodeParameterDeclarationExpression("System.Double", "value"));
+            CodeSnippetStatement snip2 = new CodeSnippetStatement();
+            snip2.Value = "return value*2;";
+            pub_method.Statements.Add(snip2);
+            class1.Members.Add(pub_method); // der Klasse die Methode hinzufügen
 
             // Quellfile erstellen
             String gen_code = GenerateCSharpCode(compileUnit);
@@ -53,7 +64,10 @@ namespace CodeDOMTest
 
             // execute the Assembly
             InvokeMethod(compiled_code, "Class1", "Main", null);
+            Object[] param = {1.0};
+            Double ret = (Double)InvokeMethod(compiled_code, "Class1", "doubleThis", param);
 
+            Console.WriteLine(ret);
             Console.ReadLine();
         }
 
