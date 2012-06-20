@@ -37,6 +37,9 @@
             this.gencode = new System.Windows.Forms.TextBox();
             this.includes = new System.Windows.Forms.CheckedListBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.compiler_output = new System.Windows.Forms.TextBox();
+            this.change_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // code
@@ -104,8 +107,7 @@
             // 
             this.includes.FormattingEnabled = true;
             this.includes.Items.AddRange(new object[] {
-            "System",
-            "System.Math"});
+            "System"});
             this.includes.Location = new System.Drawing.Point(12, 26);
             this.includes.Name = "includes";
             this.includes.Size = new System.Drawing.Size(214, 49);
@@ -120,11 +122,40 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "using";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(428, 287);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(82, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Compiler Output";
+            // 
+            // compiler_output
+            // 
+            this.compiler_output.Location = new System.Drawing.Point(431, 304);
+            this.compiler_output.Multiline = true;
+            this.compiler_output.Name = "compiler_output";
+            this.compiler_output.Size = new System.Drawing.Size(347, 119);
+            this.compiler_output.TabIndex = 10;
+            // 
+            // change_label
+            // 
+            this.change_label.AutoSize = true;
+            this.change_label.Location = new System.Drawing.Point(431, 101);
+            this.change_label.Name = "change_label";
+            this.change_label.Size = new System.Drawing.Size(56, 13);
+            this.change_label.TabIndex = 11;
+            this.change_label.Text = "some Text";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 598);
+            this.ClientSize = new System.Drawing.Size(790, 598);
+            this.Controls.Add(this.change_label);
+            this.Controls.Add(this.compiler_output);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.includes);
             this.Controls.Add(this.gencode);
@@ -152,6 +183,9 @@
         private System.Windows.Forms.TextBox gencode;
         private System.Windows.Forms.CheckedListBox includes;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox compiler_output;
+        private System.Windows.Forms.Label change_label;
     }
 }
 
