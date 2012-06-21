@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.CodeDom;
 using System.Reflection;
-using Microsoft.VisualBasic.PowerPacks;
 
 namespace presentation_app
 {
@@ -38,8 +37,6 @@ namespace presentation_app
             // Klasse hinzufügen
             samples.Types.Add(container);
 
-            change_label.Text = "new text!";
-
             /*
              * eine public methode erstellen
              */
@@ -47,7 +44,7 @@ namespace presentation_app
             pub_method.Name = "execute";
             pub_method.ReturnType = new CodeTypeReference("System.Double");
             pub_method.Attributes = MemberAttributes.Public | MemberAttributes.Static;
-            pub_method.Parameters.Add(new CodeParameterDeclarationExpression("Label", "text"));
+            pub_method.Parameters.Add(new CodeParameterDeclarationExpression("Label", "label"));
             CodeSnippetStatement input = new CodeSnippetStatement();
             input.Value = code.Text;
             pub_method.Statements.Add(input);
@@ -64,6 +61,8 @@ namespace presentation_app
             compiler_output.ResetText();
             compiler_output.Text = compiler_message;
 
+            
+
             // execute the Assembly
             if (compiled_code != null)
             {
@@ -71,6 +70,11 @@ namespace presentation_app
                 Double ret = (Double)CodeDOMTest.Generator.InvokeMethod(compiled_code, "CodeContainerClass", "execute", args);
                 result.Text = ret.ToString();
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

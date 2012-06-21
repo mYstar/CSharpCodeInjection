@@ -37,6 +37,12 @@ namespace CodeDOMTest
          */
         public static Assembly CompileCSharpCode(string sourceCode)
         {
+            String dummy;
+            return CompileCSharpCode(sourceCode, out dummy);
+        }
+
+        public static Assembly CompileCSharpCode(string sourceCode, out String status)
+        {
             CSharpCodeProvider provider = new CSharpCodeProvider();
 
             // Build the parameters for source compilation.
@@ -45,6 +51,8 @@ namespace CodeDOMTest
             // Add an assembly reference.
             cp.ReferencedAssemblies.Add("System.dll");
             cp.ReferencedAssemblies.Add("mscorlib.dll");
+            cp.ReferencedAssemblies.Add("System.Windows.Forms.dll");
+            cp.ReferencedAssemblies.Add("System.Drawing.dll");
 
             // don't generate a stand-alone executable
             cp.GenerateExecutable = false;
@@ -58,19 +66,19 @@ namespace CodeDOMTest
             // Invoke compilation.
             CompilerResults cr = provider.CompileAssemblyFromSource(cp, sourceCode);
 
+            status = "";
             if (cr.Errors.Count > 0)
             {
                 // Display compilation errors.
-                Console.WriteLine("building Errors:");
+                status += "building Errors:\n";
                 foreach (CompilerError ce in cr.Errors)
                 {
-                    Console.WriteLine("  {0}", ce.ToString());
-                    Console.WriteLine();
+                    status += "  {0}" + ce.ToString() + "\n";
                 }
             }
             else
             {
-                Console.WriteLine("Source built successfully.");
+                status += "Source built successfully.";
             }
 
             // Return the results of compilation.

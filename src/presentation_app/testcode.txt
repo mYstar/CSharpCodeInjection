@@ -1,0 +1,4 @@
+label.ForeColor = Color.Red;
+label.Text = "~new text!~";
+
+return Math.PI;
