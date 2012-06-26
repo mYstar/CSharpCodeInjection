@@ -40,6 +40,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.compiler_output = new System.Windows.Forms.TextBox();
             this.change_label = new System.Windows.Forms.Label();
+            this.radio_csharp = new System.Windows.Forms.RadioButton();
+            this.radio_vb = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // code
@@ -137,7 +139,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(431, 182);
+            this.label5.Location = new System.Drawing.Point(431, 220);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(148, 22);
             this.label5.TabIndex = 9;
@@ -147,10 +149,10 @@
             // 
             this.compiler_output.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.compiler_output.ForeColor = System.Drawing.Color.Red;
-            this.compiler_output.Location = new System.Drawing.Point(435, 207);
+            this.compiler_output.Location = new System.Drawing.Point(435, 245);
             this.compiler_output.Multiline = true;
             this.compiler_output.Name = "compiler_output";
-            this.compiler_output.Size = new System.Drawing.Size(474, 170);
+            this.compiler_output.Size = new System.Drawing.Size(474, 132);
             this.compiler_output.TabIndex = 10;
             // 
             // change_label
@@ -163,11 +165,38 @@
             this.change_label.TabIndex = 11;
             this.change_label.Text = "label";
             // 
+            // radio_csharp
+            // 
+            this.radio_csharp.AutoSize = true;
+            this.radio_csharp.Checked = true;
+            this.radio_csharp.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radio_csharp.Location = new System.Drawing.Point(431, 125);
+            this.radio_csharp.Name = "radio_csharp";
+            this.radio_csharp.Size = new System.Drawing.Size(97, 26);
+            this.radio_csharp.TabIndex = 12;
+            this.radio_csharp.TabStop = true;
+            this.radio_csharp.Text = "C Sharp";
+            this.radio_csharp.UseVisualStyleBackColor = true;
+            // 
+            // radio_vb
+            // 
+            this.radio_vb.AutoSize = true;
+            this.radio_vb.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radio_vb.Location = new System.Drawing.Point(431, 157);
+            this.radio_vb.Name = "radio_vb";
+            this.radio_vb.Size = new System.Drawing.Size(131, 26);
+            this.radio_vb.TabIndex = 13;
+            this.radio_vb.TabStop = true;
+            this.radio_vb.Text = "Visual Basic";
+            this.radio_vb.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(912, 983);
+            this.Controls.Add(this.radio_vb);
+            this.Controls.Add(this.radio_csharp);
             this.Controls.Add(this.change_label);
             this.Controls.Add(this.compiler_output);
             this.Controls.Add(this.label5);
@@ -202,6 +231,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox compiler_output;
         private System.Windows.Forms.Label change_label;
+        private System.Windows.Forms.RadioButton radio_csharp;
+        private System.Windows.Forms.RadioButton radio_vb;
     }
 }
 
