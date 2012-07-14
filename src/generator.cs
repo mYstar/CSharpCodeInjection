@@ -12,14 +12,17 @@ namespace CodeDOMTest
 {
     class Generator
     {
+        private CodeDomProvider provider;
+
+        public Generator(CodeDomProvider provider)
+        {
+            this.provider = provider;
+        }
         /**
          * Hier wird aus einer vorgefertigten CodeCompileUnit ein C# SourceFile generiert
          */
-        public static string GenerateCSharpCode(CodeCompileUnit compileunit)
+        public string GenerateCSharpCode(CodeCompileUnit compileunit)
         {
-            // Generate the code with the C# code provider.
-            CSharpCodeProvider provider = new CSharpCodeProvider();
-
             // Create a StringWriter
             StringWriter sw = new StringWriter();
             IndentedTextWriter tw = new IndentedTextWriter(sw, "  ");
@@ -35,16 +38,14 @@ namespace CodeDOMTest
         /**
          * Hier wird ein SourceFile zu einem assembly compiliert.
          */
-        public static Assembly CompileCSharpCode(string sourceCode)
+        public Assembly CompileCSharpCode(string sourceCode)
         {
-            String dummy;
-            return CompileCSharpCode(sourceCode, out dummy);
+            String status;
+            return CompileCSharpCode(sourceCode, out status);
         }
 
-        public static Assembly CompileCSharpCode(string sourceCode, out String status)
+        public Assembly CompileCSharpCode(string sourceCode, out String status)
         {
-            CSharpCodeProvider provider = new CSharpCodeProvider();
-
             // Build the parameters for source compilation.
             CompilerParameters cp = new CompilerParameters();
 
@@ -52,7 +53,6 @@ namespace CodeDOMTest
             cp.ReferencedAssemblies.Add("System.dll");
             cp.ReferencedAssemblies.Add("mscorlib.dll");
             cp.ReferencedAssemblies.Add("System.Windows.Forms.dll");
-            cp.ReferencedAssemblies.Add("System.Drawing.dll");
 
             // don't generate a stand-alone executable
             cp.GenerateExecutable = false;
@@ -73,26 +73,18 @@ namespace CodeDOMTest
                 status += "building Errors:\n";
                 foreach (CompilerError ce in cr.Errors)
                 {
-                    status += "  {0}" + ce.ToString() + "\n";
+                   status += "  {0}" + ce.ToString() + "\n";
                 }
-            }
-            else
-            {
-                status += "Source built successfully.";
-            }
-
-            // Return the results of compilation.
-            if (cr.Errors.Count > 0)
-            {
                 return null;
             }
             else
             {
-                return cr.CompiledAssembly;
+                status += "Source built successfully.\n";
+                return cr.CompiledAssembly; // Return the results of compilation.
             }
         }
 
-        public static Object InvokeMethod(Assembly assembly ,
+        public Object InvokeMethod(Assembly assembly ,
            string ClassName, string MethodName, Object[] args)
         {
             // Walk through each type in the assembly looking for our class
